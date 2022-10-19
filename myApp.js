@@ -24,6 +24,18 @@ const logger = function (req, res, next) {
 app.use("/public", express.static(__dirname + "/public"));
 app.use(logger);
 
+app.get(
+  "/now",
+  function (req, res, next) {
+    const time = new Date().toString();
+    req.time = time;
+    req.user = getTheUserSync(); // Hypothetical synchronous operation
+    next();
+  },
+  function (req, res) {
+    res.json({time: req.time});
+  }
+);
 app.get("/json", jsonResponse);
 app.get("/", hello);
 
